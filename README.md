@@ -17,3 +17,6 @@ The article is an AI-assisted draft. Review the explanation, perform and record 
 
 ## Validation (2026-11-16)
 Four Node numerical tests passed. Headless Chrome checks passed for desktop drag, keyboard moves, carried-position deltas, reset, mobile move buttons, 390px overflow, and no page errors. The static HTML contains 706 whitespace-separated words including references and UI copy.
+
+## Attention-weight heatmaps
+Each panel includes a 3×3 query-by-key probability table. Rows and columns stay in dog/bites/man identity order, independently of the sentence order. Colors share a fixed 0–100% scale across both panels; displayed percentages round to one decimal. The selected query row corresponds to the connection diagram. Browser verification covers cell-by-cell model agreement after reordering and carried-position recovery. The earlier 706-word count describes the first draft; the added labels and explanations remain below the 1,200-word limit.

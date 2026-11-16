@@ -3,6 +3,16 @@ let order=[0,1,2],selected=0,carried=false,dragged=null;
 const baseline=[attention([0,1,2]),attention([0,1,2],true)];
 const $=s=>document.querySelector(s);
 function color(v){const amount=Math.min(1,Math.abs(v)/3),target=v<0?[52,92,230]:[8,126,134];return `rgb(${target.map((c,i)=>Math.round([245,247,252][i]*(1-amount)+c*amount)).join(',')})`;}
+function weightColor(value){
+ const pale=[245,247,252], dark=[39,68,161];
+ return `rgb(${pale.map((c,i)=>Math.round(c+(dark[i]-c)*value)).join(',')})`;
+}
+function heatmap(data){
+ return `<section class="attention-map"><h4>Attention weights</h4><p class="map-axis">Rows: query (looks from) · Columns: key (looks at)</p><table><caption>Aligned by word identity, not sentence position</caption><thead><tr><th scope="col">Query ↓ / Key →</th>${tokens.map(word=>`<th scope="col">${word}</th>`).join('')}</tr></thead><tbody>${tokens.map((word,id)=>`<tr class="${id===selected?'active-query':''}"><th scope="row">${word}${id===selected?'<span class="selected-label">selected</span>':''}</th>${tokens.map((key,keyId)=>{
+ const value=data.weights[order.indexOf(id)][order.indexOf(keyId)];
+ return `<td style="background:${weightColor(value)};color:${value>0.55?'white':'#17264b'}" title="${word} → ${key}: ${(value*100).toFixed(4)}%">${(value*100).toFixed(1)}%</td>`;
+ }).join('')}</tr>`).join('')}</tbody></table><div class="map-scale"><span>0%</span><span class="map-gradient"></span><span>100%</span></div><p class="map-note">Darker = more attention. Each row sums to 100% before rounding. The selected row matches the lines above.</p></section>`;
+}
 function move(id,target){const from=order.indexOf(id);if(from===target)return;order.splice(from,1);order.splice(target,0,id);selected=id;render();$(`[data-id="${id}"]`).focus({preventScroll:true});}
 function render(){
  $('#slots').innerHTML=order.map((id,i)=>`<div class="slot" data-slot="${i}"><span class="seat">SEAT ${i+1}${carried?` · p${id+1}`:''}</span><button draggable="true" data-id="${id}" class="token ${id===selected?'selected':''}" aria-pressed="${id===selected}" aria-label="${tokens[id]}, seat ${i+1}. Select or use arrow keys to move.">${tokens[id]}</button></div>`).join('');
@@ -20,7 +30,7 @@ function render(){
  const svg=`<svg class="network" viewBox="0 0 360 145" role="img" aria-label="Attention from ${tokens[selected]}: ${order.map((id,j)=>`${tokens[id]} ${Math.round(row[j]*100)} percent`).join(', ')}"><text x="180" y="22" text-anchor="middle">${tokens[selected]} looks at</text>${order.map((id,j)=>{const x=55+125*j;return `<path d="M180 35 Q180 75 ${x} 100" fill="none" stroke="${accent}" stroke-width="${1+row[j]*13}" opacity=".5"/><text x="${x}" y="118" text-anchor="middle">${tokens[id]}</text><text class="small" x="${x}" y="136" text-anchor="middle">${(row[j]*100).toFixed(1)}%</text>`;}).join('')}</svg>`;
  // Keep row order tied to identity, not slot, so permutation alone cannot look like a changed output.
  const strips=tokens.map((word,id)=>{const out=data.outputs[order.indexOf(id)],d=delta(out,baseline[panel].outputs[id]);return `<div class="output-row"><span class="word-label">${word}</span><div class="fingerprint" aria-label="Output vector for ${word}">${out.map((v,i)=>`<span tabindex="0" class="cell" style="background:${color(v)}" title="Feature ${i+1}: ${v.toFixed(5)}" aria-label="${word} feature ${i+1}: ${v.toFixed(5)}"></span>`).join('')}</div><span class="difference">Δ ${d<1e-12?'0.000000':d.toFixed(6)}</span></div>`;}).join('');
- $(`${enabled?'#on':'#off'} .visual`).innerHTML=svg+'<p class="output-title">OUTPUTS · ALIGNED BY WORD IDENTITY</p>'+strips;
+ $(`${enabled?'#on':'#off'} .visual`).innerHTML=svg+heatmap(data)+'<p class="output-title">OUTPUTS · ALIGNED BY WORD IDENTITY</p>'+strips;
  });
  $('#on h3').textContent=carried?'Words + carried addresses':'Words + their seats';
  $('#on .panel-description').textContent=carried?'Each word keeps its original position vector.':'A fixed position vector is added before attention.';

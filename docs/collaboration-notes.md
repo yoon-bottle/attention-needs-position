@@ -16,3 +16,6 @@ These are implementation notes, not a finished student report or a verbatim chat
 
 ## Student review still needed
 Run the experiments yourself and record your own predictions, observations, questions, corrections, and decisions. Do not claim the AI's numerical checks as experiments you personally performed. Retain the original conversation/export for the required chat-log submission.
+
+## Attention heatmap follow-up
+The student asked what the output strips meant, then explicitly requested an attention-weight heatmap. AI added 3×3 probability tables, query/key labels, a shared 0–100% color scale, and selected-row highlighting. Both axes remain aligned by token identity so mere reordering cannot look like a weight change. Browser checks verified all displayed cells against the numerical model after reordering, unchanged OFF weights, changed ON weights, recovery with carried positions, and mobile width.
