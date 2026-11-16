@@ -20,3 +20,6 @@ Four Node numerical tests passed. Headless Chrome checks passed for desktop drag
 
 ## Attention-weight heatmaps
 Each panel includes a 3×3 query-by-key probability table. Rows and columns stay in dog/bites/man identity order, independently of the sentence order. Colors share a fixed 0–100% scale across both panels; displayed percentages round to one decimal. The selected query row corresponds to the connection diagram. Browser verification covers cell-by-cell model agreement after reordering and carried-position recovery. The earlier 706-word count describes the first draft; the added labels and explanations remain below the 1,200-word limit.
+
+## Second experiment
+`position-lab.js` owns independent state for the fixed-versus-carried position-vector comparison. Both panels include position information, unlike the first experiment's OFF/ON comparison. Dragging, arrow keys, mobile move buttons, swapping dog/man, and reset are supported. Output bars use a fixed 0–0.5 scale with uncapped numeric deltas. Browser validation confirmed independence, input labels, fixed-position changes and carried-position preservation. Full rendered text including references/UI remains under 1,200 words (approximately 1,120).

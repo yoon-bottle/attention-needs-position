@@ -19,3 +19,6 @@ Run the experiments yourself and record your own predictions, observations, ques
 
 ## Attention heatmap follow-up
 The student asked what the output strips meant, then explicitly requested an attention-weight heatmap. AI added 3×3 probability tables, query/key labels, a shared 0–100% color scale, and selected-row highlighting. Both axes remain aligned by token identity so mere reordering cannot look like a weight change. Browser checks verified all displayed cells against the numerical model after reordering, unchanged OFF weights, changed ON weights, recovery with carried positions, and mobile width.
+
+## Standalone position-pair experiment
+The student found the small collapsed control insufficient and requested a new interactive visual below the original. AI replaced the checkbox with an independent paired experiment: fixed slot vectors versus carried word–position bundles. It shows selected-token input expressions and token-aligned output deltas using the same numerical model. Browser checks covered independent state, swap/reset, drag, keyboard, mobile buttons, and correct zero deltas when pairs travel together.
